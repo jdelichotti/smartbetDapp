@@ -8,7 +8,7 @@ import { smartbetaddress } from '../config'
 
 
 const BetOptions = ['Local Win', 'Vistor Win', 'Drawn']  
-import SmartBet from './contracts/SmartBet.json'
+import SmartBet from '../contracts/SmartBet.json'
 
 export default function AddGamblerBet() {
   const [formInput, updateFormInput] = useState({betAmount: 0})

@@ -5,7 +5,7 @@ import Web3Modal from 'web3modal'
 
 
 import { smartbetaddress } from '../config'
-import SmartBet from './contracts/SmartBet.json'
+import SmartBet from '../contracts/SmartBet.json'
 
 export default function GambersResults() {
   

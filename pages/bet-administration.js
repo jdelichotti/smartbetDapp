@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { smartbetaddress } from '../config'
 
-import SmartBet from './contracts/SmartBet.json'
+import SmartBet from '../contracts/SmartBet.json'
 
 export default function BetDashboard() {
   const [bets, setBets] = useState([])

@@ -7,7 +7,7 @@ import Web3Modal from 'web3modal'
 import { smartbetaddress } from '../config'
 const BetResults = ['NotStarted','Local Win', 'Vistor Win', 'Drawn','Unknown']  
 
-import SmartBet from './contracts/SmartBet.json'
+import SmartBet from '../contracts/SmartBet.json'
 
 export default function DefineBetResult() {
   const [formInput, updateFormInput] = useState({betResult: 0})
