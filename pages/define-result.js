@@ -27,9 +27,17 @@ export default function DefineBetResult() {
 
     let contract = new ethers.Contract(smartbetaddress, SmartBet.abi, signer)
 
-    //const amount = ethers.utils.parseUnits(formInput.betAmount, 'ether')
-    let transaction = await contract.defineResult(id,formInput.betResult,{from:signer.address})
-    let tx = await transaction.wait()
+    try{
+      let transaction = await contract.defineResult(id,formInput.betResult,{from:signer.address})
+      let tx = await transaction.wait()
+      } catch (error) {
+        if (error.data == undefined) 
+          window.alert(error.message)
+        else {
+          window.alert(error.data.message)
+          console.log(error)
+          }
+      }
     router.push('/bet-administration')    
   }
 

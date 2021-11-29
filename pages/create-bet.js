@@ -24,8 +24,17 @@ export default function BetCreation() {
     const signer = provider.getSigner()
 
     let contract = new ethers.Contract(smartbetaddress, SmartBet.abi, signer)
+    try{
     let transaction = await contract.createBet(localTeam,visitorTeam,{from:signer.address})
     let tx = await transaction.wait()
+    } catch (error) {
+        if (error.data == undefined) 
+          window.alert(error.message)
+        else {
+          window.alert(error.data.message)
+          console.log(error)
+          }
+      }
   }
 
   return (

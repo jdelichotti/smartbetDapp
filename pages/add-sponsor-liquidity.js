@@ -26,8 +26,17 @@ export default function AddingSponsor() {
     let contract = new ethers.Contract(smartbetaddress, SmartBet.abi, signer)
     
     const amount = ethers.utils.parseUnits(formInput.sponsorAmount, 'ether')
+    try{
     let transaction = await contract.addBetSponsor(id,{from:signer.address, value: amount})
     let tx = await transaction.wait()
+      } catch (error) {
+      if (error.data == undefined) 
+        window.alert(error.message)
+      else {
+        window.alert(error.data.message)
+        console.log(error)
+        }
+    } 
     router.push('/')    
   }
 

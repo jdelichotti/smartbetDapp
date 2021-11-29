@@ -11,18 +11,25 @@ import SmartBet from '../contracts/SmartBet.json'
 export default function BetsReady() {
   const [bets, setBets] = useState([])
   const [loadingState, setLoadingState] = useState('not-loaded')
+  const [metaMask, setMetaMask] = useState('installed')
+  const [metaMaskNetwork, setMetaMaskNetwork] = useState('connected')
   const betStates = ['BetFunding', 'Created', 'Open', 'Closed', 'ResultsReady', 'ReadyForPayment', 'Finished']  
   useEffect(() => {
     loadBets()
   }, [])
 
   async function loadBets() {
+
+    // this returns the provider, or null if it wasn't detected
+    if (!window.ethereum || !window.ethereum.isMetaMask) {
+      setMetaMask('not-installed')
+      return
+    } 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const contract = new ethers.Contract(smartbetaddress, SmartBet.abi, provider)    
-    const data = await contract.getAvailableBets()
-
-
-    let betsItems = await Promise.all(data.map(async i => {
+   try{
+      const data = await contract.getAvailableBets()
+      let betsItems = await Promise.all(data.map(async i => {
       let bet = {    
         betId: i.betId.toNumber(),
         localTeam: i.localTeam,
@@ -38,13 +45,18 @@ export default function BetsReady() {
     }))
     setBets(betsItems)
     setLoadingState('loaded')
-    //console.log('items: ', bets)
+      } catch (error) { 
+        window.alert("Verify your MetaMask Network Connection")
+        setMetaMaskNetwork('not-connected')
+        return
+    }
 
   }
 
-
   
-  //if (loadingState === 'loaded' && !bets.length) return (<h1 className="py-10 px-20 text-3xl">No bets created</h1>)
+  
+  if (metaMaskNetwork === 'not-connected') return (<h1 className="px-20 py-10 text-3xl">MetaMask is in the wrong Network</h1>)
+  if (metaMask === 'not-installed') return (<h1 className="px-20 py-10 text-3xl">MetaMask is not installed</h1>)
   if (loadingState === 'loaded' && !bets.length) return (<h1 className="py-10 px-20 text-3xl">No bets created</h1>)
   return (
     

@@ -42,18 +42,6 @@ export default function BetDashboard() {
 
   }
 
-  async function openBet(betId) {
-    
-    const web3Modal = new Web3Modal()
-    const connection = await web3Modal.connect()
-    const provider = new ethers.providers.Web3Provider(connection)    
-    const signer = provider.getSigner()
-
-    let contract = new ethers.Contract(smartbetaddress, SmartBet.abi, signer)
-    let transaction = await contract.openBet(betId,{from:signer.address})
-    let tx = await transaction.wait()
-    loadBets()
-  }
 
   async function closeBet(betId) {
     
@@ -63,8 +51,17 @@ export default function BetDashboard() {
     const signer = provider.getSigner()
 
     let contract = new ethers.Contract(smartbetaddress, SmartBet.abi, signer)
-    let transaction = await contract.closeBet(betId,{from:signer.address})
-    let tx = await transaction.wait()
+    try {
+      let transaction = await contract.closeBet(betId,{from:signer.address})
+      let tx = await transaction.wait()
+    } catch (error) {
+        if (error.data == undefined) 
+          window.alert(error.message)
+        else {
+          window.alert(error.data.message)
+          console.log(error)
+          }
+      }
     loadBets()
   }
 
@@ -90,8 +87,17 @@ export default function BetDashboard() {
     const signer = provider.getSigner()
 
     let contract = new ethers.Contract(smartbetaddress, SmartBet.abi, signer)
-    let transaction = await contract.releasePayments(betId,{from:signer.address})
-    let tx = await transaction.wait()
+    try{
+      let transaction = await contract.releasePayments(betId,{from:signer.address})
+      let tx = await transaction.wait()
+    } catch (error) {
+    if (error.data == undefined) 
+      window.alert(error.message)
+    else {
+      window.alert(error.data.message)
+      console.log(error)
+      }
+    } 
     loadBets()
   }
 
